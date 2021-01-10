@@ -1,6 +1,8 @@
 import pyautogui
 import time
 from PIL.Image import *
+import os
+
 
 def get_origin():
     x, y, _, _ = pyautogui.locateOnScreen('assets/corner.png')
@@ -13,25 +15,25 @@ def image_position(x, y):
 
 
 def get_color_palette_origin():
-    x, y, _, _ = pyautogui.locateOnScreen('assets/colorPalette.png')
-    return x, y
+    x, y, color_width, color_height = pyautogui.locateOnScreen('assets/colorPalette.png')
+    return x, y, color_width, color_height
 
 
 def get_color_position(color):
-    x, y = palette_location
+    x, y, color_w, color_h = palette_location
 
     if color >= 10:
-        y = y + 22
+        y = y + color_h / 2
         color = color-10
-    x = x + (color * 22)
-    return x, y
+    x = x + (color * color_w / 10)
+    return x + 10, y + 10
 
 
 def get_dist(a, b):
-    R = pow(a[0]-b[0],2)
+    R = pow(a[0]-b[0], 2)
     G = pow(a[1]-b[1], 2)
     B = pow(a[2]-b[2], 2)
-    return 2*R+4*G+1*B
+    return 1*R+2*G+1*B
     #color1_rgb = sRGBColor(a[0], a[1], a[2]);
     #color2_rgb = sRGBColor(b[0], b[1], b[2]);
     #color1_lab = convert_color(color1_rgb, LabColor);
@@ -67,7 +69,7 @@ def sort_colors(image):
 def start_paint():
     pyautogui.hotkey('win', 'r')
     pyautogui.typewrite('mspaint\n')
-    time.sleep(0.1)
+    time.sleep(0.5)
     pyautogui.hotkey('win', 'up')
 
 
@@ -78,13 +80,22 @@ def resize_to_image():
     time.sleep(0.01)
     pyautogui.hotkey('tab')
     time.sleep(0.01)
+
     pyautogui.typewrite(repr(width))
     time.sleep(0.01)
     pyautogui.hotkey('tab')
     time.sleep(0.01)
+    pyautogui.hotkey('tab')
+    time.sleep(0.01)
+    pyautogui.hotkey('-')
+    time.sleep(0.01)
+    pyautogui.hotkey('up')
+    time.sleep(0.01)
     pyautogui.typewrite(repr(height))
     time.sleep(0.01)
     pyautogui.hotkey('enter')
+    time.sleep(0.2)
+
 
 
 def select_color(c):
